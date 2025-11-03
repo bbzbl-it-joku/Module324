@@ -1,4 +1,11 @@
-# BBZBL Modul 324: Web-Applikation Template
+# Snake Game
+
+## Beschreibung
+
+Snake Game ist ein klassisches Videospiel, bei dem der Spieler eine Schlange steuert, die sich auf einem Spielfeld bewegt. Das Ziel des Spiels ist es, so viele Früchte wie möglich zu sammeln, ohne gegen die Wände oder sich selbst zu stossen.
+Das Spiel ist von originalen Nokia-Handy-Spielen inspiriert und bietet eine einfache, aber fesselnde Spielerfahrung.
+
+## BBZBL Modul 324: Web-Applikation Template
 
 Dieses Template dient als Vorlage zum Starten eures Projekts.
 
