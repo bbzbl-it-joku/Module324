@@ -1,0 +1,79 @@
+quarkus:
+  application:
+    name: backend
+
+  # SQLite Datasource Configuration
+  datasource:
+    db-kind: sqlite
+    jdbc:
+      driver: org.sqlite.JDBC
+      url: jdbc:sqlite:database.db
+
+  # Hibernate ORM Configuration
+  hibernate-orm:
+    database:
+      generation: none
+    dialect: org.hibernate.community.dialect.SQLiteDialect
+    log:
+      sql: true
+
+  # Flyway Configuration
+  flyway:
+    migrate-at-start: true
+    baseline-on-migrate: true
+    baseline-version: "0"
+
+  # HTTP Configuration
+  http:
+    port: 8080
+    cors:
+      enabled: true
+      origins: "*"
+      methods: "GET,POST,PUT,DELETE,OPTIONS"
+      headers: "*"
+
+  # Logging Configuration
+  log:
+    console:
+      enable: true
+      level: INFO
+    category:
+      "ch.bbzbl":
+        level: DEBUG
+
+# Development Profile
+"%dev":
+  quarkus:
+    datasource:
+      jdbc:
+        url: jdbc:sqlite:database-dev.db
+    hibernate-orm:
+      log:
+        sql: true
+      database:
+        generation: none
+    flyway:
+      clean-at-start: true
+
+# Test Profile
+"%test":
+  quarkus:
+    datasource:
+      jdbc:
+        url: jdbc:sqlite::memory:
+    hibernate-orm:
+      database:
+        generation: drop-and-create
+
+# Production Profile
+"%prod":
+  quarkus:
+    datasource:
+      jdbc:
+        url: jdbc:sqlite:database-prod.db
+    hibernate-orm:
+      database:
+        generation: none
+    log:
+      console:
+        level: WARN
