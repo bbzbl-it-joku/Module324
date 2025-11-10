@@ -1,68 +1,50 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color-scheme: dark;
   }
-  a:hover {
-    color: #747bff;
+}
+
+/* Global page styles */
+@layer components {
+  .page-container {
+    @apply min-h-screen bg-gray-100 text-gray-800 dark:bg-slate-900 dark:text-white;
   }
-  button {
-    background-color: #f9f9f9;
+
+  .page-content {
+    @apply flex flex-col items-center justify-center px-4 py-6 sm:px-6 lg:px-8;
+  }
+
+  .page-header {
+    @apply mb-6 text-4xl font-bold;
+  }
+
+  .page-subheader {
+    @apply mb-4 text-2xl font-semibold;
+  }
+
+  .page-text {
+    @apply text-lg text-gray-600 dark:text-slate-300;
+  }
+
+  .link-primary {
+    @apply text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300;
+  }
+
+  .link-secondary {
+    @apply text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg transition-colors duration-200 hover:bg-blue-700;
+  }
+
+  .card {
+    @apply rounded-lg bg-white p-8 shadow-md dark:bg-slate-800;
+  }
+
+  .section {
+    @apply mb-8;
   }
 }
