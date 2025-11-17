@@ -9,3 +9,7 @@ Players can compete for high scores on the leaderboard, which tracks the best pe
 ## Frontend
 
 For more information about the frontend, see the [Frontend README](./frontend/README.md).
+
+## Backend
+
+For more information about the backend, see the [Backend README](./backend/README.md).
