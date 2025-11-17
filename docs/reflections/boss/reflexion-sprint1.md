@@ -2,16 +2,16 @@
 
 ## 1.1. Welche verschiedenen Themen behandelten wir bis jetzt?
 Bis jetzt habenn wir unterschiedliche Themen in Bereich DevOps behandelt. 
-Unter anderem, was DevOps überhaupt ist, und dann vor allem die Ersten Schritte der DevOps, also zum Beispiel wie man ein Projekt aufsetzt.
+Unter anderem, was DevOps überhaupt ist, und dann vor allem die Ersten Schritte von DevOps, also zum Beispiel wie man ein Projekt aufsetzt.
 Wir haben Git Flow und die neue Version davon, GitHub Flow angeschaut, und wieso so ein System für uns Sinn macht. 
 Wir haben angeschaut, wie man unsere IDEs identisch mittels der Editor-Konfig konfigurieren kann.
-Wir haben die automatische Formatierung von Code mittels Prettier, das Linting von Code mittels zum Beispiel ES-Lint angeschaut. 
-Und wir haben besprochen wie, wie wir autmatisierte GitHub Workflows erstellen können, wie wir einsetellen können wann und wie diese automatisch ausgeführt werden, was man mit denen alles machen kann und wie man mittels Release-Please automatisierte Releases mit Change-Log erstellen kann.
+Wir haben die automatische Formatierung von Code mittels Prettier und das Linting von Code mittels ES-Lint angeschaut. 
+Und wir haben besprochen, wie wir autmatisierte GitHub Workflows erstellen können, wie wir einstellen können wann und wie diese automatisch ausgeführt werden, was man mit denen alles machen kann und wie man mittels Release-Please automatisierte Releases mit Change-Log erstellen kann.
 Zudem habe wir angeschaut, was Conventional Commits ist und wieso diese vor allem in Zusammenhang mit automatisierten Change-Logs wichtig sind.
 
 ## 1.2. Was haben die Themen mit dem Begriff DevOps zu tun?
 Bei DevOps geht es einfach gesagt darum, das Managen der Applikation für den Entwickler einfacher zu machen. 
-Sei das automatisiertes Linten und Testen, oder automatisiertes Releasen, DevOps machen vieles einfacher und stellen dabei sicher, dass der Code zu jeder Zeit voll funktionsfähig ist. 
+Sei das automatisiertes Linten und Testen, oder automatisiertes Releasen, DevOps machen vieles einfacher und stellen dabei sicher, dass der Code zu jeder Zeit vollständig korrekt ist. 
 Deshlab sind diese Themen ein wichtiger Bestandteil von DevOps.
 
 ## 1.3. Wie war die Zusammenarbeit im Team?
@@ -25,10 +25,11 @@ Am meisten stolz sind wir auf die Zusammenarbeit im Team. Es gab nichts, bei dem
 ## 1.5. Was kann ich mehr als vorher?
 Ich kannte mich schon vor dem Modul etwas mit CI/CD und DevOps aus. Ich hatte zuvor schoneinmal GitHub Workflows geschrieben. 
 Aber was genau DevOps ist und was es macht (vor allem auch der Ablauf mit dem liegenden 8) kannte ich noch nicht. 
-Es ist immer am besten, wenn man etwas nicht nur macht, weil man das Gefühl hat, man muss es eben so machen, sonder am besten ist es, wenn man auch selbst versteht, wieso man das so macht und was dabei die Vorteile sind. 
+Es ist immer am besten, wenn an versteht, wieso man etwas so macht. 
+Das ist bei mir bei DevOps jetzt der Fall, und deshlab kann jetzt besser DevOps verstehen und mittels DevOps entwickeln.
 
 ## 1.6. Welche Schwierigkeiten gab es?
-Zuerst hatten wir Schwierigkeiten, wie genau wir unser Projekt gestalten sollte.
+Zuerst hatten wir Schwierigkeiten, wie genau wir unser Projekt definieren sollte.
 Ich bin bei Coop Frontend Entwickler und kenne mich deshalb am meisten mit Frontend aus. 
 Herr Hodel meinte zu Beginn auch, wir sollten am besten einfach nur ein Frontend machen ohne kompliziertes Backend und Datenbank.
 Simon ist aber Backend Entwickler und auch Josh wollte gerne ein Backend haben. 
@@ -36,7 +37,7 @@ Wir mussten ein wenig Diskutieren, ob wir unser Snake Game, welches wir erstelle
 Zuerst stand auch noch im Raum, dass wir ein Multiplayer Snake Game entwicklern könnten.
 Ich wollte das jedoch nicht, da ich vermutete, dass dies zu viel Aufwand sein würde. 
 Zum Glück konnten wir uns auf einen Kompromiss einigen. Wir beschlossen die Idee mit dem Multiplayer zu verwerfen. Um aber trotzdem ein Backend zu haben, entwicklen wir jetzt ein Leaderboard wo der Highscore der Spieler jeweils gespeichert und auf der Hauptseite angezeigt wird.
-So haben wir eine relativ einfache Backend Integration und können trotzdem die Stärken von allen benutzen.
+So haben wir eine relativ einfache Backend Integration und können trotzdem die Stärken von allen nutzen.
 
 ## 1.7. Was ist mir besonders gut gelungen, worauf bin ich richtig stolz?
 Ich bin stolz darauf, dass mein Kompromiss-Vorschlag so gut angekommen ist (siehe Punkt 1.6).
@@ -44,7 +45,7 @@ Ich sehe mein Rolle ein wenig als "Projekt-Koordinator". Aktuell sieht es so aus
 Das liegt unter anderem daran, das alle so gut mitmachen, aber auch daran, dass ich eine gute Kommunikation mit den anderen Pflege und wir uns gut absprechen. 
 
 ## 1.8 Was sollte beibehalten werden?
-Wir sollten weiterhin gut kommunizieren und uns absprechen wie bisher. 
+Wir sollten weiterhin gut kommunizieren und uns Absprechen wie bisher. 
 Ich habe das Gefühl, wenn wir so weitermachen, mit diesem Arbeitsklima, sind wir auf einem guten Weg. 
 Zudem macht die Arbeit am Projekt, so habe ich das Gefühl, allen Spass, was wir auch unbedingt weiterbehalten müssen.
 
