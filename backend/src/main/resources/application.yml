@@ -6,13 +6,12 @@ quarkus:
   datasource:
     db-kind: sqlite
     jdbc:
-      driver: org.sqlite.JDBC
       url: jdbc:sqlite:database.db
 
   # Hibernate ORM Configuration
   hibernate-orm:
-    database:
-      generation: none
+    schema-management:
+      strategy: none
     dialect: org.hibernate.community.dialect.SQLiteDialect
     log:
       sql: true
@@ -35,7 +34,7 @@ quarkus:
   # Logging Configuration
   log:
     console:
-      enable: true
+      enabled: true
       level: INFO
     category:
       "ch.bbzbl":
@@ -47,23 +46,6 @@ quarkus:
     datasource:
       jdbc:
         url: jdbc:sqlite:database-dev.db
-    hibernate-orm:
-      log:
-        sql: true
-      database:
-        generation: none
-    flyway:
-      clean-at-start: true
-
-# Test Profile
-"%test":
-  quarkus:
-    datasource:
-      jdbc:
-        url: jdbc:sqlite::memory:
-    hibernate-orm:
-      database:
-        generation: drop-and-create
 
 # Production Profile
 "%prod":
@@ -72,8 +54,9 @@ quarkus:
       jdbc:
         url: jdbc:sqlite:database-prod.db
     hibernate-orm:
-      database:
-        generation: none
+      schema-management:
+        strategy: none
     log:
       console:
         level: WARN
+
