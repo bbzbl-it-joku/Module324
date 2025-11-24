@@ -34,6 +34,7 @@ public class LeaderboardService {
     @Transactional
     public LeaderboardDTO create(LeaderboardDTO dto) {
         Leaderboard leaderboard = toEntity(dto);
+        leaderboard.setId(null);
         leaderboard.setCreatedAt(Instant.now());
         leaderboard.setUpdatedAt(Instant.now());
         leaderboardRepository.persist(leaderboard);
