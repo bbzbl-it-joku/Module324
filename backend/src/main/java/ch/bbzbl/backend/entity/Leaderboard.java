@@ -1,7 +1,6 @@
 package ch.bbzbl.backend.entity;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
 import lombok.Data;
 
