@@ -56,7 +56,4 @@ quarkus:
     hibernate-orm:
       schema-management:
         strategy: none
-    log:
-      console:
-        level: WARN
 
