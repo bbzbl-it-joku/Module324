@@ -1,24 +1,19 @@
 import Footer from '../components/Footer';
+import GameBoard from '../components/GameBoard';
+import { useSnakeGame } from '../hooks/useSnakeGame';
 
 export default function Home() {
+  const { gameState, resetGame, togglePause } = useSnakeGame();
+
   return (
     <div className="page-container flex min-h-screen flex-col">
-      <div className="page-content flex-1">
-        <div className="w-full max-w-lg space-y-8 text-center">
-          <div className="space-y-4">
-            <h1 className="page-header text-5xl sm:text-6xl lg:text-6xl">
-              Hello
-            </h1>
-            <p className="page-text">Welcome to Module 324</p>
-          </div>
-          <a
-            href="https://github.com/bbzbl-it-joku/Module324"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="button-primary"
-          >
-            <span>GitHub Repository</span>
-          </a>
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="w-full max-w-2xl space-y-8 px-4">
+          <GameBoard
+            gameState={gameState}
+            resetGame={resetGame}
+            togglePause={togglePause}
+          />
         </div>
       </div>
       <Footer />
