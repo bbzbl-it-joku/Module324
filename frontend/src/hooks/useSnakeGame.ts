@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KEY_TO_DIRECTION } from '../constants/game';
 import type { Difficulty, GameState, Position } from '../types/game';
-import { getInitialGameState, isOppositeDirection } from '../utils/gameLogic';
+import {
+  generateNewFruit,
+  getInitialGameState,
+  isOppositeDirection,
+  isPositionEqual,
+} from '../utils/gameLogic';
 
 export const useSnakeGame = () => {
   const [gameState, setGameState] = useState<GameState>(() =>
@@ -19,6 +24,10 @@ export const useSnakeGame = () => {
     if (e.code === 'Space') {
       e.preventDefault();
       setGameState((prevState) => {
+        if (prevState.gameOver || prevState.gameWon) {
+          return getInitialGameState(prevState.difficulty);
+        }
+
         if (!prevState.gameStarted) {
           return { ...prevState, gameStarted: true, gamePaused: false };
         }
@@ -32,7 +41,8 @@ export const useSnakeGame = () => {
     if (!newDirection) return;
 
     setGameState((prevState) => {
-      if (prevState.gamePaused || !prevState.gameStarted) return prevState;
+      if (prevState.gameOver || prevState.gamePaused || !prevState.gameStarted)
+        return prevState;
 
       // Use the last actual move direction instead of the current direction
       // to prevent multiple direction changes between game loop ticks
@@ -51,7 +61,11 @@ export const useSnakeGame = () => {
   }, [handleKeyDown]);
 
   useEffect(() => {
-    const isInactive = gameState.gamePaused || !gameState.gameStarted;
+    const isInactive =
+      gameState.gameOver ||
+      gameState.gamePaused ||
+      gameState.gameWon ||
+      !gameState.gameStarted;
 
     if (isInactive) {
       if (gameLoopRef.current) clearInterval(gameLoopRef.current);
@@ -71,13 +85,63 @@ export const useSnakeGame = () => {
           y: head.y + prevState.direction.y,
         };
 
-        // Wrap around the board (no collision for movement-only)
-        if (newHead.x < 0) newHead.x = prevState.boardSize - 1;
-        if (newHead.x >= prevState.boardSize) newHead.x = 0;
-        if (newHead.y < 0) newHead.y = prevState.boardSize - 1;
-        if (newHead.y >= prevState.boardSize) newHead.y = 0;
+        // Check wall collision (no wrap-around)
+        if (
+          newHead.x < 0 ||
+          newHead.x >= prevState.boardSize ||
+          newHead.y < 0 ||
+          newHead.y >= prevState.boardSize
+        ) {
+          return {
+            ...prevState,
+            gameOver: true,
+          };
+        }
+
+        // Check self collision
+        if (newSnake.some((segment) => isPositionEqual(segment, newHead))) {
+          return {
+            ...prevState,
+            gameOver: true,
+          };
+        }
 
         newSnake.unshift(newHead);
+
+        // Check fruit collision
+        if (isPositionEqual(newHead, prevState.fruit)) {
+          const pointsEarned = prevState.isGoldenFruit ? 5 : 1;
+          const newScore = prevState.score + pointsEarned;
+          const maxScore = prevState.boardSize * prevState.boardSize;
+
+          const finalSnake = prevState.isGoldenFruit
+            ? [...newSnake, ...Array(4).fill(newSnake[newSnake.length - 1])]
+            : newSnake;
+
+          if (newScore >= maxScore) {
+            return {
+              ...prevState,
+              snake: finalSnake,
+              isGoldenFruit: false,
+              score: newScore,
+              gameWon: true,
+            };
+          }
+
+          const { fruit, isGolden } = generateNewFruit(
+            prevState.boardSize,
+            finalSnake,
+          );
+
+          return {
+            ...prevState,
+            snake: finalSnake,
+            fruit,
+            isGoldenFruit: isGolden,
+            score: newScore,
+          };
+        }
+
         newSnake.pop();
 
         return {
@@ -90,7 +154,13 @@ export const useSnakeGame = () => {
     return () => {
       if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     };
-  }, [gameState.gamePaused, gameState.gameStarted, gameState.speed]);
+  }, [
+    gameState.gameOver,
+    gameState.gamePaused,
+    gameState.gameWon,
+    gameState.gameStarted,
+    gameState.speed,
+  ]);
 
   const resetGame = useCallback(() => {
     setGameState((prevState) => {
