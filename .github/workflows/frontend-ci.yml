@@ -27,7 +27,7 @@ jobs:
         run: npm run lint
 
       - name: Run tests
-        run: npm test -- --ci --reporters=jest-junit
+        run: npm test
 
       - name: Upload test reports
         if: success() || failure() # Always upload even if tests fail
