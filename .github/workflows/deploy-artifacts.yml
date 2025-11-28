@@ -1,0 +1,60 @@
+name: Deploy Artifacts Pipeline
+
+on:
+  workflow_call:
+
+jobs:
+  rebundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Download frontend assets
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-assets
+          path: ./frontend-dist
+
+      - name: Download backend JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-jar
+          path: ./backend-jar
+
+      - name: Prepare combined JAR
+        run: |
+          # Find the JAR file
+          JAR_FILE=$(find ./backend-jar -name "*-runner.jar" | head -1)
+
+          # Create temp directory for JAR contents
+          mkdir -p temp-jar
+          cd temp-jar
+
+          # Extract JAR
+          jar -xf "../$JAR_FILE"
+
+          # Remove existing static resources if any
+          rm -rf META-INF/resources/static 2>/dev/null || true
+
+          # Create static resources directory
+          mkdir -p META-INF/resources/static
+
+          # Copy frontend assets to static directory
+          cp -r ../frontend-dist/* META-INF/resources/static/
+
+          # Repackage JAR
+          jar -cfm "../app.jar" META-INF/MANIFEST.MF .
+
+          cd ..
+          rm -rf temp-jar
+
+      - name: Upload combined JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: combined-jar
+          path: ./app.jar
+          retention-days: 30
