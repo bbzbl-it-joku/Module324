@@ -1,0 +1,28 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    command: npm run dev -- --host 0.0.0.0
+
+  backend:
+    image: eclipse-temurin:21-jdk
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ./backend:/app
+      - ~/.m2:/root/.m2
+    working_dir: /app
+    command: ./mvnw quarkus:dev -Dquarkus.http.host=0.0.0.0 -Dquarkus.dev.debug.enabled=true -Dquarkus.dev.debug.host=0.0.0.0
+    environment:
+      - QUARKUS_PROFILE=dev
