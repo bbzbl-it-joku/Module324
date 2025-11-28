@@ -22,3 +22,25 @@ jobs:
 
       - name: Run Spotless check
         run: ./mvnw spotless:check
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            VERSION="${GITHUB_REF_NAME}"
+          else
+            VERSION="DEV-SNAPSHOT"
+          fi
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build JAR
+        run: ./mvnw clean package -Pprod -DskipTests -Drevision=${VERSION}
+
+      - name: Upload backend JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: backend/target/*-runner.jar
+          retention-days: 1
