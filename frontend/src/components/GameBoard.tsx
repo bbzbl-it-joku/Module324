@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useGameRenderer } from '../hooks/useGameRenderer';
+import { useScoreAnimation } from '../hooks/useScoreAnimation';
 import type { GameState } from '../types/game';
 import GameControls from './GameControls';
 import GameStatus from './GameStatus';
@@ -18,6 +19,7 @@ export default function GameBoard({
 }: GameBoardProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDarkMode = useDarkMode();
+  const { isGolden } = useScoreAnimation(gameState.score);
 
   useGameRenderer(canvasRef, gameState, { isDarkMode });
 
@@ -27,11 +29,20 @@ export default function GameBoard({
   return (
     <>
       <div className="flex flex-col items-center justify-center space-y-6 rounded-lg bg-white p-6 shadow-lg dark:bg-[#1A1F26]">
-        {/* Title */}
+        {/* Score Display */}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Snake Game
           </h2>
+          <p
+            className={`text-3xl font-bold transition-all duration-500 ${
+              isGolden
+                ? 'scale-105 text-amber-400'
+                : 'scale-100 text-emerald-500'
+            }`}
+          >
+            Score: {gameState.score}
+          </p>
         </div>
 
         {/* Canvas */}
@@ -46,12 +57,16 @@ export default function GameBoard({
         <div className="h-7 text-center">
           <GameStatus
             gameStarted={gameState.gameStarted}
+            gameOver={gameState.gameOver}
             gamePaused={gameState.gamePaused}
+            gameWon={gameState.gameWon}
           />
         </div>
 
         {/* Controls */}
         <GameControls
+          gameOver={gameState.gameOver}
+          gameWon={gameState.gameWon}
           gameStarted={gameState.gameStarted}
           gamePaused={gameState.gamePaused}
           onReset={resetGame}

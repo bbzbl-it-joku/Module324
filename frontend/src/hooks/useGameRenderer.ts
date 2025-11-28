@@ -32,6 +32,9 @@ export const useGameRenderer = (
     const colors = {
       snake: '#10b981',
       snakeHead: '#6ee7b7',
+      fruit: options.isDarkMode ? '#f87171' : '#ef4444',
+      goldenFruit: '#fcd34d',
+      goldenBorder: options.isDarkMode ? '#f97316' : '#f59e0b',
       bg: options.isDarkMode ? '#1a1f26' : '#f3f4f6',
       grid: options.isDarkMode ? '#374151' : '#d1d5db',
     };
@@ -97,6 +100,35 @@ export const useGameRenderer = (
         }
       });
 
+      const fruitX = gameState.fruit.x * gameState.cellSize;
+      const fruitY = gameState.fruit.y * gameState.cellSize;
+
+      if (gameState.isGoldenFruit) {
+        ctx.fillStyle = colors.goldenFruit;
+        ctx.fillRect(
+          fruitX + 1,
+          fruitY + 1,
+          gameState.cellSize - 2,
+          gameState.cellSize - 2,
+        );
+        ctx.strokeStyle = colors.goldenBorder;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(
+          fruitX + 1,
+          fruitY + 1,
+          gameState.cellSize - 2,
+          gameState.cellSize - 2,
+        );
+      } else {
+        ctx.fillStyle = colors.fruit;
+        ctx.fillRect(
+          fruitX + 2,
+          fruitY + 2,
+          gameState.cellSize - 4,
+          gameState.cellSize - 4,
+        );
+      }
+
       if (progressRef.current < 1) {
         frameId = requestAnimationFrame(draw);
       }
@@ -108,6 +140,8 @@ export const useGameRenderer = (
     canvasRef,
     gameState.snake,
     gameState.speed,
+    gameState.fruit,
+    gameState.isGoldenFruit,
     gameState.boardSize,
     gameState.cellSize,
     options.isDarkMode,
