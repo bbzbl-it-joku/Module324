@@ -44,6 +44,57 @@ docker-compose down
 docker-compose -f compose.dev.yml down
 ```
 
+## Build Scripts
+
+For a complete build similar to the CI/CD pipeline, use the provided build scripts:
+
+### Unix/Linux/macOS
+```bash
+# Full build (frontend + backend + Docker image)
+./build.sh
+
+# Skip cleaning previous builds
+./build.sh --no-clean
+
+# Skip cleaning (faster rebuilds)
+./build.sh --no-clean
+
+# Show help
+./build.sh --help
+```
+
+### Windows
+```cmd
+REM Full build (frontend + backend + Docker image)
+build.bat
+
+REM Show help
+build.bat --help
+```
+
+The build script will:
+1. Clean previous builds
+2. Install dependencies for both frontend and backend
+3. Run backend tests
+4. Build frontend for production
+5. Build backend uber-jar with production profile
+6. **Rebundle JAR** - Combine frontend assets into backend JAR
+7. Output rebundled JAR to `dist/app.jar`
+
+This creates a single JAR file that serves both the API and web UI, identical to the CI/CD pipeline (which uses the same rebundle script).
+
+### Standalone Rebundling
+
+You can also use the rebundling scripts directly:
+
+```bash
+# Unix/Linux/macOS
+./ci/rebundle.sh backend/target/backend-PROD-SNAPSHOT-runner.jar frontend/dist dist/app.jar
+
+# Windows
+ci\rebundle.bat backend\target\backend-PROD-SNAPSHOT-runner.jar frontend\dist dist\app.jar
+```
+
 ## Manual Setup
 
 ### Frontend
