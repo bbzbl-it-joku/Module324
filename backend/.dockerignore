@@ -1,5 +1,7 @@
-*
-!target/*-runner
-!target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+target/
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/
+!mvnw
+!mvnw.cmd
+!pom.xml
+!src/
