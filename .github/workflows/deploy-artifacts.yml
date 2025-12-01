@@ -35,7 +35,7 @@ jobs:
         run: |
           # Find the JAR file
           JAR_FILE=$(find ./backend-jar -name "*-runner.jar" | head -1)
-          
+
           # Use our rebundle script
           ./ci/rebundle.sh "$JAR_FILE" ./frontend-dist ./app.jar
 
@@ -46,12 +46,16 @@ jobs:
           path: ./app.jar
           retention-days: 30
 
+      - name: Rename combined JAR
+        if: github.ref_type == 'tag'
+        run: mv ./app.jar ./app-${{ github.ref_name }}.jar
+
       - name: Upload JAR to release
         if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v1
         with:
-          files: ./app.jar
-          name: module324-${{ github.ref_name }}.jar
+          files: ./app-${{ github.ref_name }}.jar
+          name: ${{ github.ref_name }}
 
   build_image:
     runs-on: ubuntu-latest
