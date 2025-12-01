@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KEY_TO_DIRECTION } from '../constants/game';
-import type { Difficulty, GameState, Position } from '../types/game';
+import type { Difficulty, GameState, LeaderboardEntry, Position } from '../types/game';
 import {
   generateNewFruit,
   getInitialGameState,
   isOppositeDirection,
   isPositionEqual,
 } from '../utils/gameLogic';
+import { addOrUpdateScore, loadLeaderboard } from '../utils/leaderboard';
 
 export const useSnakeGame = () => {
   const [gameState, setGameState] = useState<GameState>(() =>
     getInitialGameState('medium'),
+  );
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(() =>
+    loadLeaderboard(),
   );
 
   const gameLoopRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -196,10 +200,26 @@ export const useSnakeGame = () => {
     });
   }, []);
 
+  const saveScore = useCallback(
+    (name: string) => {
+      const { entries, isNewHighscore } = addOrUpdateScore(
+        name,
+        gameState.score,
+        gameState.difficulty,
+        gameState.gameWon,
+      );
+      setLeaderboard(entries);
+      return isNewHighscore;
+    },
+    [gameState.score, gameState.difficulty, gameState.gameWon],
+  );
+
   return {
     gameState,
+    leaderboard,
     resetGame,
     togglePause,
     setDifficulty,
+    saveScore,
   };
 };
