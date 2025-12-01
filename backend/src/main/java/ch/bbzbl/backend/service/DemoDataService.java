@@ -7,11 +7,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class DemoDataService {
@@ -58,13 +57,13 @@ public class DemoDataService {
         entry.setScore(score);
         entry.setDifficulty(difficulty);
 
-        Instant timestamp = daysAgo > 0 
+        Instant timestamp = daysAgo > 0
             ? Instant.now().minus(daysAgo, ChronoUnit.DAYS)
             : Instant.now().minus((int)(Math.random() * 24), ChronoUnit.HOURS);
-        
+
         entry.setCreatedAt(timestamp);
         entry.setUpdatedAt(timestamp);
-        
+
         return entry;
     }
 }
