@@ -1,11 +1,49 @@
+import { useState, useEffect } from 'react';
 import DifficultySwitcher from '../components/DifficultySwitcher';
 import Footer from '../components/Footer';
 import GameBoard from '../components/GameBoard';
 import Leaderboard from '../components/Leaderboard';
+import PlayerNameDialog from '../components/PlayerNameDialog';
+import WinDialog from '../components/WinDialog';
 import { useSnakeGame } from '../hooks/useSnakeGame';
 
 export default function Home() {
-  const { gameState, setDifficulty, resetGame, togglePause } = useSnakeGame();
+  const { gameState, leaderboard, setDifficulty, resetGame, togglePause, saveScore } =
+    useSnakeGame();
+  const [showNameDialog, setShowNameDialog] = useState(false);
+  const [playerName, setPlayerName] = useState<string | null>(null);
+  const [isNewHighscore, setIsNewHighscore] = useState(false);
+
+  useEffect(() => {
+    // Check if player name exists in localStorage
+    const savedName = localStorage.getItem('snake-game-player-name');
+    if (savedName) {
+      setPlayerName(savedName);
+    } else {
+      setShowNameDialog(true);
+    }
+  }, []);
+
+  const handleSaveName = (name: string) => {
+    localStorage.setItem('snake-game-player-name', name);
+    setPlayerName(name);
+    setShowNameDialog(false);
+  };
+
+  const handlePlayAgain = () => {
+    resetGame();
+    setIsNewHighscore(false);
+  };
+
+  const showDialog = gameState.gameOver || gameState.gameWon;
+
+  // Save score when game ends
+  useEffect(() => {
+    if (showDialog && playerName) {
+      const highscore = saveScore(playerName);
+      setIsNewHighscore(highscore);
+    }
+  }, [showDialog, playerName, saveScore]);
 
   return (
     <div className="page-container flex min-h-screen flex-col">
@@ -14,7 +52,10 @@ export default function Home() {
           <div className="flex gap-8">
             <aside className="hidden w-80 lg:flex lg:flex-col lg:justify-center">
               <div className="flex flex-col gap-6 rounded-lg bg-white p-6 shadow-lg dark:bg-[#1A1F26]">
-                <Leaderboard difficulty={gameState.difficulty} />
+                <Leaderboard
+                  difficulty={gameState.difficulty}
+                  entries={leaderboard}
+                />
                 <DifficultySwitcher
                   currentDifficulty={gameState.difficulty}
                   onDifficultyChange={setDifficulty}
@@ -35,6 +76,17 @@ export default function Home() {
         </div>
       </div>
       <Footer />
+
+      {showNameDialog && <PlayerNameDialog onSaveName={handleSaveName} />}
+
+      {showDialog && playerName && (
+        <WinDialog
+          score={gameState.score}
+          won={gameState.gameWon}
+          isNewHighscore={isNewHighscore}
+          onPlayAgain={handlePlayAgain}
+        />
+      )}
     </div>
   );
 }

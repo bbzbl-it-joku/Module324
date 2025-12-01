@@ -3,6 +3,14 @@ export interface Position {
   y: number;
 }
 
+export interface LeaderboardEntry {
+  name: string;
+  score: number;
+  difficulty: Difficulty;
+  won: boolean;
+  timestamp: number;
+}
+
 export interface GameState {
   snake: Position[];
   fruit: Position;
