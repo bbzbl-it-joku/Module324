@@ -5,6 +5,7 @@ import { useScoreAnimation } from '../hooks/useScoreAnimation';
 import type { GameState } from '../types/game';
 import GameControls from './GameControls';
 import GameStatus from './GameStatus';
+import WinDialog from './WinDialog';
 
 interface GameBoardProps {
   gameState: GameState;
@@ -79,6 +80,11 @@ export default function GameBoard({
           start, pause, or resume
         </p>
       </div>
+
+      {/* Win Dialog */}
+      {gameState.gameWon && (
+        <WinDialog score={gameState.score} onPlayAgain={resetGame} />
+      )}
     </>
   );
 }
