@@ -1,6 +1,7 @@
 import DifficultySwitcher from '../components/DifficultySwitcher';
 import Footer from '../components/Footer';
 import GameBoard from '../components/GameBoard';
+import Leaderboard from '../components/Leaderboard';
 import { useSnakeGame } from '../hooks/useSnakeGame';
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
           <div className="flex gap-8">
             <aside className="hidden w-80 lg:flex lg:flex-col lg:justify-center">
               <div className="flex flex-col gap-6 rounded-lg bg-white p-6 shadow-lg dark:bg-[#1A1F26]">
+                <Leaderboard difficulty={gameState.difficulty} />
                 <DifficultySwitcher
                   currentDifficulty={gameState.difficulty}
                   onDifficultyChange={setDifficulty}
