@@ -17,9 +17,9 @@ public class LeaderboardController {
     LeaderboardService leaderboardService;
 
     @GET
-    @Path("/top10")
-    public Response getTop10() {
-        List<LeaderboardDTO> top10 = leaderboardService.getTop10();
+    @Path("/top10/{difficulty}")
+    public Response getTop10(@PathParam("difficulty") String difficulty) {
+        List<LeaderboardDTO> top10 = leaderboardService.getTop10(difficulty);
         return Response.ok(top10).build();
     }
 

@@ -13,7 +13,7 @@ public class LeaderboardRepository implements PanacheRepository<Leaderboard> {
         return find("name = ?1 ORDER BY score DESC", name).firstResult();
     }
 
-    public List<Leaderboard> findTop10ByScoreDesc() {
-        return find("ORDER BY score DESC").page(Page.ofSize(10)).list();
+    public List<Leaderboard> findTop10ByScoreDesc(String difficulty) {
+        return find("difficulty = ?1 ORDER BY score DESC", difficulty).page(Page.ofSize(10)).list();
     }
 }

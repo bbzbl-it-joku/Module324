@@ -8,7 +8,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class LeaderboardService {
@@ -16,14 +15,14 @@ public class LeaderboardService {
     @Inject
     LeaderboardRepository leaderboardRepository;
 
-    public List<LeaderboardDTO> getTop10() {
-        return leaderboardRepository.findTop10ByScoreDesc().stream()
+    public List<LeaderboardDTO> getTop10(String difficulty) {
+        return leaderboardRepository.findTop10ByScoreDesc(difficulty).stream()
                 .map(this::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<LeaderboardDTO> getAll() {
-        return leaderboardRepository.listAll().stream().map(this::toDTO).collect(Collectors.toList());
+        return leaderboardRepository.listAll().stream().map(this::toDTO).toList();
     }
 
     public LeaderboardDTO getById(Integer id) {
@@ -65,7 +64,8 @@ public class LeaderboardService {
 
     private LeaderboardDTO toDTO(Leaderboard entity) {
         return new LeaderboardDTO(
-                entity.getId(), entity.getUserName(), entity.getScore(), entity.getCreatedAt(), entity.getUpdatedAt());
+                entity.getId(), entity.getUserName(), entity.getScore(), entity.getCreatedAt(), entity.getUpdatedAt(), entity.getDifficulty()
+        );
     }
 
     private Leaderboard toEntity(LeaderboardDTO dto) {
@@ -75,6 +75,8 @@ public class LeaderboardService {
         leaderboard.setScore(dto.getScore());
         leaderboard.setCreatedAt(dto.getCreatedAt());
         leaderboard.setUpdatedAt(dto.getUpdatedAt());
+        leaderboard.setDifficulty(dto.getDifficulty());
         return leaderboard;
     }
+
 }

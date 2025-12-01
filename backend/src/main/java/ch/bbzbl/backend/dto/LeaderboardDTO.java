@@ -15,4 +15,5 @@ public class LeaderboardDTO {
     private Integer score;
     private Instant createdAt;
     private Instant updatedAt;
+    private String difficulty;
 }
