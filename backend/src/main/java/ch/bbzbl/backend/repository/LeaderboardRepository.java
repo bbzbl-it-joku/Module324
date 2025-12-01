@@ -14,6 +14,6 @@ public class LeaderboardRepository implements PanacheRepository<Leaderboard> {
     }
 
     public List<Leaderboard> findTop10ByScoreDesc(String difficulty) {
-        return find("difficulty = ?1 ORDER BY score DESC", difficulty).page(Page.ofSize(10)).list();
+        return find("difficulty LIKE ?1 ORDER BY score DESC", difficulty).page(Page.ofSize(10)).list();
     }
 }
