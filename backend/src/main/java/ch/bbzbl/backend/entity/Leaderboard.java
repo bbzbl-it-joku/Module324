@@ -23,4 +23,7 @@ public class Leaderboard {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    private String difficulty;
+
 }
