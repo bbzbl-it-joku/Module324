@@ -53,7 +53,21 @@ docker-compose up -d backend
 ./mvnw test
 ```
 
-## 4. Docker Configuration
+## 4. Demo Data
+
+In development mode, the backend automatically loads demo leaderboard data on startup. This includes:
+- 10 sample leaderboard entries
+- Various difficulty levels (easy, medium, hard)
+- Different scores and timestamps
+- Realistic user names
+
+The demo data is only loaded:
+- When running in development profile (`QUARKUS_PROFILE=dev`)
+- When the database is empty (prevents duplicates)
+
+Demo data loading is handled by `DemoDataService` which runs on application startup.
+
+## 5. Docker Configuration
 
 ### Base Images
 

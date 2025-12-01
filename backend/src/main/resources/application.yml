@@ -45,6 +45,7 @@ quarkus:
         level: DEBUG
 
 # Development Profile
+# Demo data is automatically loaded by DemoDataService on startup
 "%dev":
   quarkus:
     datasource:
