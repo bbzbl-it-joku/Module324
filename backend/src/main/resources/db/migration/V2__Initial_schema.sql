@@ -1,4 +1,4 @@
-ALTER TABLE leaderboard ADD COLUMN difficulty TEXT NOT NULL;
+ALTER TABLE leaderboard ADD COLUMN difficulty TEXT NOT NULL DEFAULT 'unknown';
 
 -- Remove the old index on score
 DROP INDEX IF EXISTS idx_leaderboard_score;
