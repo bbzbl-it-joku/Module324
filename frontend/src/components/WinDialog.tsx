@@ -24,7 +24,7 @@ export default function WinDialog({
   };
 
   const getSubtext = () => {
-     if (won) return 'You won the game!';
+    if (won) return 'You won the game!';
     if (isNewHighscore) return 'You beat your personal best!';
     return 'Better luck next time!';
   };
@@ -53,8 +53,7 @@ export default function WinDialog({
           onClick={onPlayAgain}
           className="rounded-lg bg-emerald-500 px-8 py-3 font-semibold text-white transition hover:bg-emerald-600 active:bg-emerald-700"
         >
-          Play Again 
-        
+          Play Again
         </button>
       </div>
     </div>

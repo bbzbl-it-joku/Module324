@@ -34,7 +34,7 @@ export default function PlayerNameDialog({
             onKeyDown={(e) => e.key === 'Enter' && handleSave()}
             placeholder="Your name"
             maxLength={20}
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-gray-600 dark:bg-[#0C1116] dark:text-white dark:focus:border-emerald-400 dark:focus:ring-emerald-400"
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:border-gray-600 dark:bg-[#0C1116] dark:text-white dark:focus:border-emerald-400 dark:focus:ring-emerald-400"
             autoFocus
           />
         </div>

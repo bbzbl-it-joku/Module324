@@ -8,12 +8,21 @@ import WinDialog from '../components/WinDialog';
 import { useSnakeGame } from '../hooks/useSnakeGame';
 
 export default function Home() {
-  const { gameState, leaderboard, setDifficulty, resetGame, togglePause, saveScore } =
-    useSnakeGame();
+  const {
+    gameState,
+    leaderboard,
+    setDifficulty,
+    resetGame,
+    togglePause,
+    saveScore,
+  } = useSnakeGame();
   const [showNameDialog, setShowNameDialog] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [isNewHighscore, setIsNewHighscore] = useState(false);
-  const [lastGameEndState, setLastGameEndState] = useState({ gameOver: false, gameWon: false });
+  const [lastGameEndState, setLastGameEndState] = useState({
+    gameOver: false,
+    gameWon: false,
+  });
 
   useEffect(() => {
     // Check if player name exists in localStorage
@@ -41,19 +50,29 @@ export default function Home() {
 
   // Save score when game ends (only once per game!)
   useEffect(() => {
-    const currentGameEndState = { gameOver: gameState.gameOver, gameWon: gameState.gameWon };
-    
+    const currentGameEndState = {
+      gameOver: gameState.gameOver,
+      gameWon: gameState.gameWon,
+    };
+
     // Only save if game just ended (state changed from not-ended to ended)
-    const gameJustEnded = 
+    const gameJustEnded =
       (currentGameEndState.gameOver || currentGameEndState.gameWon) &&
-      (!lastGameEndState.gameOver && !lastGameEndState.gameWon);
-    
+      !lastGameEndState.gameOver &&
+      !lastGameEndState.gameWon;
+
     if (gameJustEnded && playerName) {
       const highscore = saveScore(playerName);
       setIsNewHighscore(highscore);
       setLastGameEndState(currentGameEndState);
     }
-  }, [gameState.gameOver, gameState.gameWon, playerName, saveScore, lastGameEndState]);
+  }, [
+    gameState.gameOver,
+    gameState.gameWon,
+    playerName,
+    saveScore,
+    lastGameEndState,
+  ]);
 
   return (
     <div className="page-container flex min-h-screen flex-col">
