@@ -22,13 +22,29 @@ export const useSnakeGame = () => {
 
   // Load leaderboard on mount
   useEffect(() => {
-    loadLeaderboard().then(setLeaderboard).catch(console.error);
+    let isMounted = true;
+    loadLeaderboard()
+      .then((data) => {
+        if (isMounted) {
+          setLeaderboard(data);
+        }
+      })
+      .catch(console.error);
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const gameLoopRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastMoveDirectionRef = useRef<Position>(gameState.direction);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Ignore keyboard input if user is typing in an input field
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return;
+    }
+
     if (KEY_TO_DIRECTION[e.key]) {
       e.preventDefault();
     }
@@ -209,17 +225,25 @@ export const useSnakeGame = () => {
   }, []);
 
   const saveScore = useCallback(
-    async (name: string): Promise<boolean> => {
-      const { entries, isNewHighscore } = await addOrUpdateScore(
-        name,
-        gameState.score,
-        gameState.difficulty,
-        gameState.gameWon,
-      );
+    async (
+      name: string,
+    ): Promise<{
+      isNewHighscore: boolean;
+      previousHighscore: number | null;
+      scoreTooLow: boolean;
+    }> => {
+      const { entries, isNewHighscore, previousHighscore, scoreTooLow } =
+        await addOrUpdateScore(
+          name,
+          gameState.score,
+          gameState.difficulty,
+          gameState.gameWon,
+          leaderboard, // Pass current leaderboard to avoid extra API call
+        );
       setLeaderboard(entries);
-      return isNewHighscore;
+      return { isNewHighscore, previousHighscore, scoreTooLow };
     },
-    [gameState.score, gameState.difficulty, gameState.gameWon],
+    [gameState.score, gameState.difficulty, gameState.gameWon, leaderboard],
   );
 
   return {

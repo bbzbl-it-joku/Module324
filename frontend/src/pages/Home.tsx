@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DifficultySwitcher from '../components/DifficultySwitcher';
 import Footer from '../components/Footer';
 import GameBoard from '../components/GameBoard';
@@ -19,10 +19,16 @@ export default function Home() {
   const [showNameDialog, setShowNameDialog] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [isNewHighscore, setIsNewHighscore] = useState(false);
+  const [previousHighscore, setPreviousHighscore] = useState<number | null>(
+    null,
+  );
+  const [scoreTooLow, setScoreTooLow] = useState(false);
+  const [scoreSaved, setScoreSaved] = useState(false);
   const [lastGameEndState, setLastGameEndState] = useState({
     gameOver: false,
     gameWon: false,
   });
+  const scoreSaveInProgressRef = useRef(false);
 
   useEffect(() => {
     // Check if player name exists in localStorage
@@ -43,7 +49,11 @@ export default function Home() {
   const handlePlayAgain = () => {
     resetGame();
     setIsNewHighscore(false);
+    setPreviousHighscore(null);
+    setScoreTooLow(false);
+    setScoreSaved(false);
     setLastGameEndState({ gameOver: false, gameWon: false });
+    scoreSaveInProgressRef.current = false;
   };
 
   const showDialog = gameState.gameOver || gameState.gameWon;
@@ -61,21 +71,40 @@ export default function Home() {
       !lastGameEndState.gameOver &&
       !lastGameEndState.gameWon;
 
-    if (gameJustEnded && playerName) {
+    // Reset dialog states when game starts (transitioning from ended to not-ended)
+    const gameJustStarted =
+      !currentGameEndState.gameOver &&
+      !currentGameEndState.gameWon &&
+      (lastGameEndState.gameOver || lastGameEndState.gameWon);
+
+    if (gameJustStarted) {
+      setScoreSaved(false);
+      setIsNewHighscore(false);
+      setPreviousHighscore(null);
+      setScoreTooLow(false);
+      setLastGameEndState(currentGameEndState);
+      return;
+    }
+
+    if (gameJustEnded && playerName && !scoreSaveInProgressRef.current) {
+      scoreSaveInProgressRef.current = true;
+      setScoreSaved(false); // Reset before saving
       saveScore(playerName)
-        .then((highscore) => {
-          setIsNewHighscore(highscore);
+        .then((result) => {
+          setIsNewHighscore(result.isNewHighscore);
+          setPreviousHighscore(result.previousHighscore);
+          setScoreTooLow(result.scoreTooLow);
+          setScoreSaved(true); // Mark as saved
+          scoreSaveInProgressRef.current = false;
         })
-        .catch(console.error);
+        .catch((error) => {
+          console.error('[HOME] Error saving score:', error);
+          setScoreSaved(true); // Still show dialog even if save failed
+          scoreSaveInProgressRef.current = false;
+        });
       setLastGameEndState(currentGameEndState);
     }
-  }, [
-    gameState.gameOver,
-    gameState.gameWon,
-    playerName,
-    saveScore,
-    lastGameEndState,
-  ]);
+  }, [gameState.gameOver, gameState.gameWon, playerName, lastGameEndState]);
 
   return (
     <div className="page-container flex min-h-screen flex-col">
@@ -87,6 +116,7 @@ export default function Home() {
                 <Leaderboard
                   difficulty={gameState.difficulty}
                   entries={leaderboard}
+                  currentPlayerName={playerName}
                 />
                 <DifficultySwitcher
                   currentDifficulty={gameState.difficulty}
@@ -111,11 +141,13 @@ export default function Home() {
 
       {showNameDialog && <PlayerNameDialog onSaveName={handleSaveName} />}
 
-      {showDialog && playerName && (
+      {showDialog && playerName && scoreSaved && (
         <WinDialog
           score={gameState.score}
           won={gameState.gameWon}
           isNewHighscore={isNewHighscore}
+          previousHighscore={previousHighscore}
+          scoreTooLow={scoreTooLow}
           onPlayAgain={handlePlayAgain}
         />
       )}
