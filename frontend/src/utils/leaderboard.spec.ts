@@ -96,7 +96,7 @@ describe('leaderboard utils', () => {
     it('should reject scores below minimum (3)', async () => {
       vi.mocked(leaderboardApi.getAll).mockResolvedValue([]);
 
-      const result = await addOrUpdateScore('Player1', 2, 'easy', false);
+      const result = await addOrUpdateScore('Player1', 2, 'easy');
 
       expect(result.scoreTooLow).toBe(true);
       expect(result.isNewHighscore).toBe(false);
@@ -112,7 +112,7 @@ describe('leaderboard utils', () => {
         difficulty: 'medium',
       });
 
-      const result = await addOrUpdateScore('NewPlayer', 50, 'medium', false);
+      const result = await addOrUpdateScore('NewPlayer', 50, 'medium');
 
       expect(leaderboardApi.create).toHaveBeenCalledWith({
         userName: 'NewPlayer',
@@ -137,7 +137,7 @@ describe('leaderboard utils', () => {
         score: 100,
       });
 
-      const result = await addOrUpdateScore('Player1', 100, 'hard', false);
+      const result = await addOrUpdateScore('Player1', 100, 'hard');
 
       expect(leaderboardApi.update).toHaveBeenCalledWith(1, {
         userName: 'Player1',
@@ -158,7 +158,7 @@ describe('leaderboard utils', () => {
 
       vi.mocked(leaderboardApi.getAll).mockResolvedValue([existingEntry]);
 
-      const result = await addOrUpdateScore('Player1', 50, 'easy', false);
+      const result = await addOrUpdateScore('Player1', 50, 'easy');
 
       expect(leaderboardApi.update).not.toHaveBeenCalled();
       expect(leaderboardApi.create).not.toHaveBeenCalled();
@@ -176,7 +176,7 @@ describe('leaderboard utils', () => {
 
       vi.mocked(leaderboardApi.getAll).mockResolvedValue([existingEntry]);
 
-      const result = await addOrUpdateScore('Player1', 75, 'medium', false);
+      const result = await addOrUpdateScore('Player1', 75, 'medium');
 
       expect(leaderboardApi.update).not.toHaveBeenCalled();
       expect(result.isNewHighscore).toBe(false);
@@ -197,7 +197,7 @@ describe('leaderboard utils', () => {
         score: 100,
       });
 
-      const result = await addOrUpdateScore('player1', 100, 'easy', false);
+      const result = await addOrUpdateScore('player1', 100, 'easy');
 
       expect(leaderboardApi.update).toHaveBeenCalled();
       expect(result.previousHighscore).toBe(50);
@@ -230,7 +230,6 @@ describe('leaderboard utils', () => {
         'Player1',
         100,
         'hard',
-        false,
         currentLeaderboard,
       );
 
@@ -255,7 +254,6 @@ describe('leaderboard utils', () => {
         'Player1',
         50,
         'medium',
-        false,
         currentLeaderboard,
       );
 
@@ -273,7 +271,7 @@ describe('leaderboard utils', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      const result = await addOrUpdateScore('Player1', 100, 'easy', false);
+      const result = await addOrUpdateScore('Player1', 100, 'easy');
 
       expect(result.entries).toEqual([]);
       expect(result.isNewHighscore).toBe(false);
@@ -300,7 +298,7 @@ describe('leaderboard utils', () => {
         difficulty: 'hard',
       });
 
-      const result = await addOrUpdateScore('Player1', 50, 'hard', false);
+      const result = await addOrUpdateScore('Player1', 50, 'hard');
 
       expect(leaderboardApi.create).toHaveBeenCalledWith({
         userName: 'Player1',
@@ -334,7 +332,7 @@ describe('leaderboard utils', () => {
         .mockResolvedValueOnce(updatedData);
       vi.mocked(leaderboardApi.update).mockResolvedValue(updatedData[0]);
 
-      const result = await addOrUpdateScore('Player1', 100, 'easy', false);
+      const result = await addOrUpdateScore('Player1', 100, 'easy');
 
       expect(leaderboardApi.getAll).toHaveBeenCalledTimes(2);
       expect(result.isNewHighscore).toBe(true);

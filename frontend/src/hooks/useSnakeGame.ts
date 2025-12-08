@@ -237,13 +237,12 @@ export const useSnakeGame = () => {
           name,
           gameState.score,
           gameState.difficulty,
-          gameState.gameWon,
           leaderboard, // Pass current leaderboard to avoid extra API call
         );
       setLeaderboard(entries);
       return { isNewHighscore, previousHighscore, scoreTooLow };
     },
-    [gameState.score, gameState.difficulty, gameState.gameWon, leaderboard],
+    [gameState.score, gameState.difficulty, leaderboard],
   );
 
   return {
