@@ -78,12 +78,14 @@ npm run test:coverage
 ### Test Coverage
 
 Tests focus on logic-heavy components and utilities:
+
 - ✅ **Game logic utilities** (`gameLogic.ts`) - Position generation, fruit spawning, game state initialization
 - ✅ **Game constants** (`game.ts`) - Difficulty configurations, direction mappings, key bindings
 - ✅ **Game state management** (`useSnakeGame.ts`) - Game loop, keyboard controls, pause/resume, collision detection, score tracking
 - ✅ **Interactive components** (`GameControls`, `DifficultySwitcher`) - User interactions and state changes
 
 **Current Coverage:**
+
 - **89.42%** Statement Coverage
 - **82.81%** Branch Coverage
 - **100%** Function Coverage

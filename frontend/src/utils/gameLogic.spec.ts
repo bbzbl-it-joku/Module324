@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
+import { DIRECTIONS } from '../constants/game';
+import type { Position } from '../types/game';
 import {
   generateNewFruit,
   generateRandomPosition,
@@ -6,8 +8,6 @@ import {
   isOppositeDirection,
   isPositionEqual,
 } from './gameLogic';
-import { DIRECTIONS } from '../constants/game';
-import type { Position } from '../types/game';
 
 describe('gameLogic utils', () => {
   describe('isPositionEqual', () => {
@@ -36,14 +36,19 @@ describe('gameLogic utils', () => {
   describe('generateRandomPosition', () => {
     it('should generate a position within bounds and not on snake', () => {
       const boardSize = 10;
-      const snake: Position[] = [{ x: 5, y: 5 }, { x: 5, y: 6 }];
+      const snake: Position[] = [
+        { x: 5, y: 5 },
+        { x: 5, y: 6 },
+      ];
       const position = generateRandomPosition(boardSize, snake);
 
       expect(position.x).toBeGreaterThanOrEqual(0);
       expect(position.x).toBeLessThan(boardSize);
       expect(position.y).toBeGreaterThanOrEqual(0);
       expect(position.y).toBeLessThan(boardSize);
-      expect(snake.some(s => s.x === position.x && s.y === position.y)).toBe(false);
+      expect(snake.some((s) => s.x === position.x && s.y === position.y)).toBe(
+        false,
+      );
     });
   });
 
