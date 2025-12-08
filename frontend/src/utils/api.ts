@@ -19,7 +19,9 @@ export const leaderboardApi = {
   },
 
   async getTop10(difficulty: Difficulty): Promise<LeaderboardApiEntry[]> {
-    const response = await fetch(`${API_BASE_URL}/api/leaderboard/top10/${difficulty}`);
+    const response = await fetch(
+      `${API_BASE_URL}/api/leaderboard/top10/${difficulty}`,
+    );
     if (!response.ok) throw new Error('Failed to fetch top 10');
     return response.json();
   },
@@ -30,7 +32,9 @@ export const leaderboardApi = {
     return response.json();
   },
 
-  async create(entry: Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<LeaderboardApiEntry> {
+  async create(
+    entry: Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<LeaderboardApiEntry> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard`, {
       method: 'POST',
       headers: {
@@ -42,7 +46,10 @@ export const leaderboardApi = {
     return response.json();
   },
 
-  async update(id: number, entry: Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<LeaderboardApiEntry> {
+  async update(
+    id: number,
+    entry: Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<LeaderboardApiEntry> {
     const response = await fetch(`${API_BASE_URL}/api/leaderboard/${id}`, {
       method: 'PUT',
       headers: {

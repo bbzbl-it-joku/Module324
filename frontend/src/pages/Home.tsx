@@ -104,7 +104,13 @@ export default function Home() {
         });
       setLastGameEndState(currentGameEndState);
     }
-  }, [gameState.gameOver, gameState.gameWon, playerName, lastGameEndState]);
+  }, [
+    gameState.gameOver,
+    gameState.gameWon,
+    playerName,
+    lastGameEndState,
+    saveScore,
+  ]);
 
   return (
     <div className="page-container flex min-h-screen flex-col">
