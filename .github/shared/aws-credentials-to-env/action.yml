@@ -1,0 +1,35 @@
+name: "aws-credentials"
+description: "Parse AWS Credentials to Env"
+
+inputs:
+  aws-credentials:
+    description: "AWS Credential Config"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Expose AWS Credential as ENV Vars
+      id: expose-aws-env
+      env:
+        AWS_CREDENTIALS: ${{ inputs.aws-credentials }}
+      shell: bash
+      run: |
+        printf "$AWS_CREDENTIALS\n" |
+        while IFS=' = ' read key value
+        do
+            if [[ $key == \[*] ]]; then
+                section=$key
+            elif [[ $value ]] && [[ $section == '[default]' ]]; then
+                MASKED_VAL=$value
+                # Maskieren, damit die secrets nicht gelogged werden!!
+                echo "::add-mask::$MASKED_VAL"
+                if [[ $key == 'aws_access_key_id' ]]; then
+                    echo "aws-access-key-id=$MASKED_VAL" >> $GITHUB_ENV
+                elif [[ $key == 'aws_secret_access_key' ]]; then
+                    echo "aws-secret-access-key=$MASKED_VAL" >> $GITHUB_ENV
+                elif [[ $key == 'aws_session_token' ]]; then
+                    echo "aws-session-token=$MASKED_VAL" >> $GITHUB_ENV
+                fi
+            fi
+        done
