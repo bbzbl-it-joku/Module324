@@ -50,9 +50,63 @@ npm run build
 
 # Preview build
 npm run preview
+
+# Run tests
+npm test
+
+# Run tests with coverage report
+npm run test:coverage
 ```
 
-## 4. Docker Configuration
+## 4. Testing
+
+The frontend uses **Vitest** as a test framework together with **React Testing Library** for component testing.
+
+### Test Commands
+
+```bash
+# Run tests (Watch Mode)
+npm test
+
+# Run tests once
+npm test -- --run
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+### Test Coverage
+
+Tests focus on logic-heavy components and utilities:
+- ✅ **Game logic utilities** (`gameLogic.ts`) - Position generation, fruit spawning, game state initialization
+- ✅ **Game constants** (`game.ts`) - Difficulty configurations, direction mappings, key bindings
+- ✅ **Game state management** (`useSnakeGame.ts`) - Game loop, keyboard controls, pause/resume, collision detection, score tracking
+- ✅ **Interactive components** (`GameControls`, `DifficultySwitcher`) - User interactions and state changes
+
+**Current Coverage:**
+- **89.42%** Statement Coverage
+- **82.81%** Branch Coverage
+- **100%** Function Coverage
+- **89.69%** Line Coverage
+
+Purely presentational components without logic are not tested.
+
+### View Coverage Report
+
+After running `npm run test:coverage`, a detailed HTML report is generated:
+
+```bash
+# Open HTML report (macOS)
+open coverage/index.html
+
+# Open HTML report (Linux)
+xdg-open coverage/index.html
+
+# Open HTML report (Windows)
+start coverage/index.html
+```
+
+## 5. Docker Configuration
 
 ### Base Images
 
