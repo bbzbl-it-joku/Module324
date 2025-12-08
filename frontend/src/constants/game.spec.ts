@@ -4,15 +4,33 @@ import { DIFFICULTY_CONFIGS, DIRECTIONS, KEY_TO_DIRECTION } from './game';
 describe('game constants', () => {
   describe('DIFFICULTY_CONFIGS', () => {
     it('should have correct configurations', () => {
-      expect(DIFFICULTY_CONFIGS.easy).toEqual({ boardSize: 10, cellSize: 30, speed: 200 });
-      expect(DIFFICULTY_CONFIGS.medium).toEqual({ boardSize: 20, cellSize: 20, speed: 130 });
-      expect(DIFFICULTY_CONFIGS.hard).toEqual({ boardSize: 30, cellSize: 15, speed: 100 });
+      expect(DIFFICULTY_CONFIGS.easy).toEqual({
+        boardSize: 10,
+        cellSize: 30,
+        speed: 200,
+      });
+      expect(DIFFICULTY_CONFIGS.medium).toEqual({
+        boardSize: 20,
+        cellSize: 20,
+        speed: 130,
+      });
+      expect(DIFFICULTY_CONFIGS.hard).toEqual({
+        boardSize: 30,
+        cellSize: 15,
+        speed: 100,
+      });
     });
 
     it('should scale difficulty correctly', () => {
-      expect(DIFFICULTY_CONFIGS.easy.boardSize).toBeLessThan(DIFFICULTY_CONFIGS.medium.boardSize);
-      expect(DIFFICULTY_CONFIGS.medium.boardSize).toBeLessThan(DIFFICULTY_CONFIGS.hard.boardSize);
-      expect(DIFFICULTY_CONFIGS.easy.speed).toBeGreaterThan(DIFFICULTY_CONFIGS.hard.speed);
+      expect(DIFFICULTY_CONFIGS.easy.boardSize).toBeLessThan(
+        DIFFICULTY_CONFIGS.medium.boardSize,
+      );
+      expect(DIFFICULTY_CONFIGS.medium.boardSize).toBeLessThan(
+        DIFFICULTY_CONFIGS.hard.boardSize,
+      );
+      expect(DIFFICULTY_CONFIGS.easy.speed).toBeGreaterThan(
+        DIFFICULTY_CONFIGS.hard.speed,
+      );
     });
   });
 

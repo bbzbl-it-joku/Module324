@@ -1,5 +1,5 @@
-import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSnakeGame } from './useSnakeGame';
 
 describe('useSnakeGame', () => {
@@ -296,10 +296,10 @@ describe('useSnakeGame', () => {
     // - Regular fruit collision (adds 1 point, grows by 1)
     // - Golden fruit collision (adds 5 points, grows by 5)
     // - Win condition (score >= boardSize²)
-    
+
     it('should have collision detection code paths defined', () => {
       const { result } = renderHook(() => useSnakeGame());
-      
+
       // The game loop contains:
       // Line 103: Self-collision check
       // Lines 113-136: Fruit collision logic
