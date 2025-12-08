@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.2.0](https://github.com/bbzbl-it-joku/Module324/compare/v1.1.0...v1.2.0) (2025-12-08)
+
+
+### Features
+
+* **backend:** Add demo data service for development environment ([ad79b5d](https://github.com/bbzbl-it-joku/Module324/commit/ad79b5d369a333baca0cbeab1690e997f6b04694))
+* **backend:** Added difficulty ([613c3cc](https://github.com/bbzbl-it-joku/Module324/commit/613c3cc5498142551ef72d01313514ebc1d3f713))
+* **frontend:** Add local leaderboard component to display game scores ([a58a077](https://github.com/bbzbl-it-joku/Module324/commit/a58a077f3ff509fa7aea302d3d62911b668c13d5))
+* **frontend:** Add tests for game logic, components, and hooks ([21668f2](https://github.com/bbzbl-it-joku/Module324/commit/21668f29998f463d6e34bfcf8777fc6f77928977))
+* **frontend:** Enhance game experience with leaderboard, player name dialog, and win dialog ([3207666](https://github.com/bbzbl-it-joku/Module324/commit/3207666334e4013c75458d2f37f671a800b854e6))
+* **frontend:** Enhance leaderboard and player name handling with validation and score tracking ([a59df41](https://github.com/bbzbl-it-joku/Module324/commit/a59df41a24438bf0ecadedcd0a23a401444079a3))
+* **frontend:** Implement leaderboard API integration and async score handling ([fe5a9a7](https://github.com/bbzbl-it-joku/Module324/commit/fe5a9a7fcaa9f5df413ec48a34225ccfc52ccfd8))
+* **frontend:** Implement local dummy WinDialog component to display winning message and score ([e2c9ea3](https://github.com/bbzbl-it-joku/Module324/commit/e2c9ea3238b31a631e879faf328d3db85e2f9900))
+* **frontend:** Refine game end state handling and leaderboard score updates ([61e382e](https://github.com/bbzbl-it-joku/Module324/commit/61e382e3c40973ce7785b431399cf4917631c712))
+* **terraform:** Implement AWS infrastructure setup with Terraform scripts and actions ([ee0e20b](https://github.com/bbzbl-it-joku/Module324/commit/ee0e20bdf000b834fdafe320f9eb6e5c685fdb00))
+
+
+### Bug Fixes
+
+* **backend:** Added default value for difficulty ([fc8be3d](https://github.com/bbzbl-it-joku/Module324/commit/fc8be3d38c8ceb133eb516c391d02494501d8d1a))
+* **ci:** Rename Jar before adding to release ([bf61eb6](https://github.com/bbzbl-it-joku/Module324/commit/bf61eb6d7c172c707b494a77ee6ca93178d59cad))
+* **frontend:** Add package-lock.json ([8a1212c](https://github.com/bbzbl-it-joku/Module324/commit/8a1212cf968a00044117947b21ab5ae9d58fb2aa))
+* **frontend:** Fix lint and build ([fc021e7](https://github.com/bbzbl-it-joku/Module324/commit/fc021e758de2634b4eaad699db70c664fe338bdd))
+* **frontend:** run eslint and prettier ([49174ca](https://github.com/bbzbl-it-joku/Module324/commit/49174cadd98c088159d81d32248670d6b9dc4516))
+
 ## [1.1.0](https://github.com/bbzbl-it-joku/Module324/compare/v1.0.0...v1.1.0) (2025-12-01)
 
 
