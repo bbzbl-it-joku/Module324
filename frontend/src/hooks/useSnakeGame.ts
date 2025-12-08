@@ -18,9 +18,12 @@ export const useSnakeGame = () => {
   const [gameState, setGameState] = useState<GameState>(() =>
     getInitialGameState('medium'),
   );
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(() =>
-    loadLeaderboard(),
-  );
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+
+  // Load leaderboard on mount
+  useEffect(() => {
+    loadLeaderboard().then(setLeaderboard).catch(console.error);
+  }, []);
 
   const gameLoopRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastMoveDirectionRef = useRef<Position>(gameState.direction);
@@ -206,8 +209,8 @@ export const useSnakeGame = () => {
   }, []);
 
   const saveScore = useCallback(
-    (name: string) => {
-      const { entries, isNewHighscore } = addOrUpdateScore(
+    async (name: string): Promise<boolean> => {
+      const { entries, isNewHighscore } = await addOrUpdateScore(
         name,
         gameState.score,
         gameState.difficulty,

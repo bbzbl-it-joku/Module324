@@ -1,69 +1,74 @@
 import type { Difficulty, LeaderboardEntry } from '../types/game';
+import { leaderboardApi, type LeaderboardApiEntry } from './api';
 
-const LEADERBOARD_KEY = 'snake-game-leaderboard';
+// Convert API response to frontend format
+const apiToLocal = (apiEntry: LeaderboardApiEntry): LeaderboardEntry => ({
+  name: apiEntry.userName,
+  score: apiEntry.score,
+  difficulty: apiEntry.difficulty as Difficulty,
+  won: false, // Backend doesn't store won status yet
+  timestamp: apiEntry.createdAt ? new Date(apiEntry.createdAt).getTime() : Date.now(),
+  id: apiEntry.id,
+});
 
-export const loadLeaderboard = (): LeaderboardEntry[] => {
+// Convert frontend format to API request
+const localToApi = (
+  name: string,
+  score: number,
+  difficulty: Difficulty,
+): Omit<LeaderboardApiEntry, 'id' | 'createdAt' | 'updatedAt'> => ({
+  userName: name,
+  score,
+  difficulty,
+});
+
+export const loadLeaderboard = async (): Promise<LeaderboardEntry[]> => {
   try {
-    const stored = localStorage.getItem(LEADERBOARD_KEY);
-    if (stored) {
-      return JSON.parse(stored);
-    }
+    const apiEntries = await leaderboardApi.getAll();
+    return apiEntries.map(apiToLocal);
   } catch (error) {
-    console.error('Failed to load leaderboard:', error);
+    console.error('Failed to load leaderboard from backend:', error);
+    return [];
   }
-  return [];
 };
 
-export const saveLeaderboard = (entries: LeaderboardEntry[]): void => {
-  try {
-    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(entries));
-  } catch (error) {
-    console.error('Failed to save leaderboard:', error);
-  }
-};
-
-export const addOrUpdateScore = (
+export const addOrUpdateScore = async (
   name: string,
   score: number,
   difficulty: Difficulty,
   won: boolean,
-): { entries: LeaderboardEntry[]; isNewHighscore: boolean } => {
-  const entries = loadLeaderboard();
-  let isNewHighscore = false;
+): Promise<{ entries: LeaderboardEntry[]; isNewHighscore: boolean }> => {
+  try {
+    // Load all entries to find existing one
+    const allEntries = await leaderboardApi.getAll();
+    
+    // Find existing entry for this player and difficulty
+    const existingEntry = allEntries.find(
+      (entry) =>
+        entry.userName.toLowerCase() === name.toLowerCase() &&
+        entry.difficulty === difficulty,
+    );
 
-  // Find existing entry for this player and difficulty
-  const existingIndex = entries.findIndex(
-    (entry) =>
-      entry.name.toLowerCase() === name.toLowerCase() &&
-      entry.difficulty === difficulty,
-  );
+    let isNewHighscore = false;
 
-  const newEntry: LeaderboardEntry = {
-    name,
-    score,
-    difficulty,
-    won,
-    timestamp: Date.now(),
-  };
-
-  if (existingIndex !== -1) {
-    // Update only if new score is HIGHER (not equal!)
-    if (score > entries[existingIndex].score) {
-      entries[existingIndex] = newEntry;
-      isNewHighscore = true;
+    if (existingEntry && existingEntry.id) {
+      // Update only if new score is HIGHER
+      if (score > existingEntry.score) {
+        await leaderboardApi.update(existingEntry.id, localToApi(name, score, difficulty));
+        isNewHighscore = true;
+      }
+      // If score is same or lower, don't update
     } else {
-      // Update timestamp and won status if score is same or lower, but don't mark as highscore
-      entries[existingIndex] = {
-        ...newEntry,
-        score: entries[existingIndex].score,
-      };
+      // Create new entry (first time playing this difficulty)
+      await leaderboardApi.create(localToApi(name, score, difficulty));
+      isNewHighscore = true;
     }
-  } else {
-    // Add new entry (first time playing this difficulty)
-    entries.push(newEntry);
-    isNewHighscore = true;
-  }
 
-  saveLeaderboard(entries);
-  return { entries, isNewHighscore };
+    // Reload leaderboard to get updated data
+    const entries = await loadLeaderboard();
+    return { entries, isNewHighscore };
+  } catch (error) {
+    console.error('Failed to add/update score:', error);
+    return { entries: [], isNewHighscore: false };
+  }
 };

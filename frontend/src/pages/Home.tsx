@@ -62,8 +62,11 @@ export default function Home() {
       !lastGameEndState.gameWon;
 
     if (gameJustEnded && playerName) {
-      const highscore = saveScore(playerName);
-      setIsNewHighscore(highscore);
+      saveScore(playerName)
+        .then((highscore) => {
+          setIsNewHighscore(highscore);
+        })
+        .catch(console.error);
       setLastGameEndState(currentGameEndState);
     }
   }, [
