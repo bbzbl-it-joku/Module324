@@ -40,7 +40,6 @@ export const addOrUpdateScore = async (
   name: string,
   score: number,
   difficulty: Difficulty,
-  won: boolean,
   currentLeaderboard?: LeaderboardEntry[],
 ): Promise<{
   entries: LeaderboardEntry[];
