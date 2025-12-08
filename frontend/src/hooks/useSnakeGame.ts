@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KEY_TO_DIRECTION } from '../constants/game';
-import type { Difficulty, GameState, LeaderboardEntry, Position } from '../types/game';
+import type {
+  Difficulty,
+  GameState,
+  LeaderboardEntry,
+  Position,
+} from '../types/game';
 import {
   generateNewFruit,
   getInitialGameState,

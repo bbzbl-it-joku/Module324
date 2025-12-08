@@ -30,12 +30,12 @@ export const addOrUpdateScore = (
 ): { entries: LeaderboardEntry[]; isNewHighscore: boolean } => {
   const entries = loadLeaderboard();
   let isNewHighscore = false;
-  
+
   // Find existing entry for this player and difficulty
   const existingIndex = entries.findIndex(
-    (entry) => 
-      entry.name.toLowerCase() === name.toLowerCase() && 
-      entry.difficulty === difficulty
+    (entry) =>
+      entry.name.toLowerCase() === name.toLowerCase() &&
+      entry.difficulty === difficulty,
   );
 
   const newEntry: LeaderboardEntry = {
@@ -53,7 +53,10 @@ export const addOrUpdateScore = (
       isNewHighscore = true;
     } else {
       // Update timestamp and won status if score is same or lower, but don't mark as highscore
-      entries[existingIndex] = { ...newEntry, score: entries[existingIndex].score };
+      entries[existingIndex] = {
+        ...newEntry,
+        score: entries[existingIndex].score,
+      };
     }
   } else {
     // Add new entry (first time playing this difficulty)
