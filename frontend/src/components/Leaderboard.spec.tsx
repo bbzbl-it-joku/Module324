@@ -7,34 +7,34 @@ describe('Leaderboard', () => {
   const mockEntries: LeaderboardEntry[] = [
     {
       id: 1,
-      name: 'Player1',
+      userName: 'Player1',
       score: 150,
       difficulty: 'easy',
-      won: false,
+
       timestamp: Date.now(),
     },
     {
       id: 2,
-      name: 'Player2',
+      userName: 'Player2',
       score: 100,
       difficulty: 'easy',
-      won: false,
+
       timestamp: Date.now(),
     },
     {
       id: 3,
-      name: 'Player3',
+      userName: 'Player3',
       score: 80,
       difficulty: 'easy',
-      won: false,
+
       timestamp: Date.now(),
     },
     {
       id: 4,
-      name: 'Player4',
+      userName: 'Player4',
       score: 200,
       difficulty: 'medium',
-      won: false,
+
       timestamp: Date.now(),
     },
   ];
@@ -103,10 +103,10 @@ describe('Leaderboard', () => {
       { length: 10 },
       (_, i) => ({
         id: i + 1,
-        name: `Player${i + 1}`,
+        userName: `Player${i + 1}`,
         score: 100 - i * 5,
         difficulty: 'hard',
-        won: false,
+
         timestamp: Date.now(),
       }),
     );
@@ -123,10 +123,10 @@ describe('Leaderboard', () => {
       { length: 10 },
       (_, i) => ({
         id: i + 1,
-        name: `Player${i + 1}`,
+        userName: `Player${i + 1}`,
         score: 100 - i * 5,
         difficulty: 'medium',
-        won: false,
+
         timestamp: Date.now(),
       }),
     );
@@ -148,10 +148,10 @@ describe('Leaderboard', () => {
     const entriesWithDate: LeaderboardEntry[] = [
       {
         id: 1,
-        name: 'Player1',
+        userName: 'Player1',
         score: 100,
         difficulty: 'easy',
-        won: false,
+
         timestamp,
       },
     ];

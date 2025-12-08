@@ -35,18 +35,18 @@ describe('leaderboard utils', () => {
 
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
-        name: 'Player1',
+        userName: 'Player1',
         score: 100,
         difficulty: 'easy',
-        won: false,
+
         timestamp: new Date('2024-01-01T00:00:00Z').getTime(),
         id: 1,
       });
       expect(result[1]).toEqual({
-        name: 'Player2',
+        userName: 'Player2',
         score: 200,
         difficulty: 'medium',
-        won: false,
+
         timestamp: new Date('2024-01-02T00:00:00Z').getTime(),
         id: 2,
       });
@@ -88,7 +88,7 @@ describe('leaderboard utils', () => {
 
       expect(result).toHaveLength(1);
       expect(result[0].timestamp).toBeGreaterThan(0);
-      expect(result[0].name).toBe('Player1');
+      expect(result[0].userName).toBe('Player1');
     });
   });
 
@@ -207,10 +207,10 @@ describe('leaderboard utils', () => {
       const currentLeaderboard: LeaderboardEntry[] = [
         {
           id: 1,
-          name: 'Player1',
+          userName: 'Player1',
           score: 50,
           difficulty: 'hard',
-          won: false,
+
           timestamp: Date.now(),
         },
       ];
@@ -242,10 +242,10 @@ describe('leaderboard utils', () => {
       const currentLeaderboard: LeaderboardEntry[] = [
         {
           id: 1,
-          name: 'Player1',
+          userName: 'Player1',
           score: 100,
           difficulty: 'medium',
-          won: false,
+
           timestamp: Date.now(),
         },
       ];
