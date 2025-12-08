@@ -1,0 +1,113 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Setup Infrastructure on Amazon AWS
+
+on: workflow_dispatch
+
+env:
+  AWS_REGION: us-east-1 # set this to your preferred AWS region, e.g. us-west-1
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: Create AWS ressources
+    runs-on: ubuntu-latest
+    environment: aws
+    outputs:
+      server-ip: ${{ steps.terraform-apply.outputs.server-ip }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: "./.github/shared/aws-credentials-to-env"
+        with:
+          aws-credentials: ${{ secrets.AWS_CREDENTIALS }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.aws-access-key-id }}
+          aws-secret-access-key: ${{ env.aws-secret-access-key }}
+          aws-session-token: ${{ env.aws-session-token }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.12.2"
+
+      - name: Terraform plan and apply
+        id: terraform-apply
+        working-directory: terraform
+        shell: bash
+        run: |
+          bash deploy.sh
+          echo "server-ip=$(sh scripts/get_public_ip.sh ubuntu2404)" >> $GITHUB_OUTPUT
+
+  kamal:
+    name: Bootstrap Kamal on AWS EC2 instance
+    needs: terraform
+    runs-on: ubuntu-latest
+    environment: aws
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: "./.github/shared/aws-credentials-to-env"
+        with:
+          aws-credentials: ${{ secrets.AWS_CREDENTIALS }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.aws-access-key-id }}
+          aws-secret-access-key: ${{ env.aws-secret-access-key }}
+          aws-session-token: ${{ env.aws-session-token }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+
+      - name: Set up Ruby for Kamal
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: ./kamal/Gemfile
+        with:
+          ruby-version: 3.4.2
+          bundler-cache: true
+
+      - name: Bootstrap Kamal
+        working-directory: kamal
+        env:
+          KAMAL_SERVER_IP: ${{ needs.terraform.outputs.server-ip }}
+          KAMAL_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          KAMAL_REGISTRY_PASSWORD: ${{ steps.login-ecr.outputs[format('docker_password_{0}_dkr_ecr_us_east_1_amazonaws_com', secrets.AWS_ACCOUNT_ID)] }}
+        run: |
+          # Ensures that all Servers have docker installed
+          bundle exec kamal server bootstrap
+
+      # INFO: Uncomment to add mysql to the server
+      #       Also add all envs defiend in the deploy.yml as GitHub Environment vars.
+      # - name: Boot Mysql
+      #   working-directory: kamal
+      #   env:
+      #     KAMAL_SERVER_IP: ${{ env.SERVER_IP }}
+      #     KAMAL_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     KAMAL_REGISTRY_PASSWORD: ${{ steps.login-ecr.outputs[format('docker_password_{0}_dkr_ecr_us_east_1_amazonaws_com', secrets.AWS_ACCOUNT_ID)] }}
+      #   run: |
+      #     if [ $(bundle exec kamal accessory details mysql | grep -c "Accessory mysql") -eq 1 ]
+      #     then
+      #       echo "Mysql already booted."
+      #       bundle exec kamal accessory restart mysql
+      #     else
+      #       bundle exec kamal accessory boot mysql
+      #     fi
