@@ -47,19 +47,18 @@ export const addOrUpdateScore = (
   };
 
   if (existingIndex !== -1) {
-    // Update only if new score is higher or equal (to always show for first game)
+    // Update only if new score is HIGHER (not equal!)
     if (score > entries[existingIndex].score) {
       entries[existingIndex] = newEntry;
       isNewHighscore = true;
-    } else if (score === entries[existingIndex].score) {
-      // Update timestamp but don't mark as new highscore
-      entries[existingIndex] = newEntry;
+    } else {
+      // Update timestamp and won status if score is same or lower, but don't mark as highscore
+      entries[existingIndex] = { ...newEntry, score: entries[existingIndex].score };
     }
   } else {
     // Add new entry (first time playing this difficulty)
     entries.push(newEntry);
-    // Mark as new highscore if score > 0 (not just opening the game)
-    isNewHighscore = score > 0;
+    isNewHighscore = true;
   }
 
   saveLeaderboard(entries);

@@ -13,6 +13,7 @@ export default function Home() {
   const [showNameDialog, setShowNameDialog] = useState(false);
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [isNewHighscore, setIsNewHighscore] = useState(false);
+  const [lastGameEndState, setLastGameEndState] = useState({ gameOver: false, gameWon: false });
 
   useEffect(() => {
     // Check if player name exists in localStorage
@@ -33,17 +34,26 @@ export default function Home() {
   const handlePlayAgain = () => {
     resetGame();
     setIsNewHighscore(false);
+    setLastGameEndState({ gameOver: false, gameWon: false });
   };
 
   const showDialog = gameState.gameOver || gameState.gameWon;
 
-  // Save score when game ends
+  // Save score when game ends (only once per game!)
   useEffect(() => {
-    if (showDialog && playerName) {
+    const currentGameEndState = { gameOver: gameState.gameOver, gameWon: gameState.gameWon };
+    
+    // Only save if game just ended (state changed from not-ended to ended)
+    const gameJustEnded = 
+      (currentGameEndState.gameOver || currentGameEndState.gameWon) &&
+      (!lastGameEndState.gameOver && !lastGameEndState.gameWon);
+    
+    if (gameJustEnded && playerName) {
       const highscore = saveScore(playerName);
       setIsNewHighscore(highscore);
+      setLastGameEndState(currentGameEndState);
     }
-  }, [showDialog, playerName, saveScore]);
+  }, [gameState.gameOver, gameState.gameWon, playerName, saveScore, lastGameEndState]);
 
   return (
     <div className="page-container flex min-h-screen flex-col">
