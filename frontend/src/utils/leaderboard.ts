@@ -7,7 +7,9 @@ const apiToLocal = (apiEntry: LeaderboardApiEntry): LeaderboardEntry => ({
   score: apiEntry.score,
   difficulty: apiEntry.difficulty as Difficulty,
   won: false, // Backend doesn't store won status yet
-  timestamp: apiEntry.createdAt ? new Date(apiEntry.createdAt).getTime() : Date.now(),
+  timestamp: apiEntry.createdAt
+    ? new Date(apiEntry.createdAt).getTime()
+    : Date.now(),
   id: apiEntry.id,
 });
 
@@ -32,16 +34,32 @@ export const loadLeaderboard = async (): Promise<LeaderboardEntry[]> => {
   }
 };
 
+const MIN_SCORE_FOR_LEADERBOARD = 3;
+
 export const addOrUpdateScore = async (
   name: string,
   score: number,
   difficulty: Difficulty,
   won: boolean,
-): Promise<{ entries: LeaderboardEntry[]; isNewHighscore: boolean }> => {
+  currentLeaderboard?: LeaderboardEntry[],
+): Promise<{
+  entries: LeaderboardEntry[];
+  isNewHighscore: boolean;
+  previousHighscore: number | null;
+  scoreTooLow: boolean;
+}> => {
   try {
-    // Load all entries to find existing one
-    const allEntries = await leaderboardApi.getAll();
-    
+    // Use current leaderboard if provided, otherwise load from API
+    const allEntries = currentLeaderboard
+      ? currentLeaderboard.map((entry) => ({
+          id: entry.id,
+          userName: entry.name,
+          score: entry.score,
+          difficulty: entry.difficulty,
+          createdAt: new Date(entry.timestamp).toISOString(),
+        }))
+      : await leaderboardApi.getAll();
+
     // Find existing entry for this player and difficulty
     const existingEntry = allEntries.find(
       (entry) =>
@@ -49,26 +67,48 @@ export const addOrUpdateScore = async (
         entry.difficulty === difficulty,
     );
 
+    const previousHighscore = existingEntry?.score ?? null;
     let isNewHighscore = false;
+    let scoreTooLow = false;
+
+    // Check if score meets minimum requirement
+    if (score < MIN_SCORE_FOR_LEADERBOARD) {
+      scoreTooLow = true;
+      const entries = await loadLeaderboard();
+      return { entries, isNewHighscore: false, previousHighscore, scoreTooLow };
+    }
 
     if (existingEntry && existingEntry.id) {
       // Update only if new score is HIGHER
       if (score > existingEntry.score) {
-        await leaderboardApi.update(existingEntry.id, localToApi(name, score, difficulty));
+        await leaderboardApi.update(
+          existingEntry.id,
+          localToApi(name, score, difficulty),
+        );
         isNewHighscore = true;
       }
       // If score is same or lower, don't update
     } else {
       // Create new entry (first time playing this difficulty)
+      // This IS a highscore because it's the player's first score for this difficulty!
       await leaderboardApi.create(localToApi(name, score, difficulty));
       isNewHighscore = true;
     }
 
-    // Reload leaderboard to get updated data
-    const entries = await loadLeaderboard();
-    return { entries, isNewHighscore };
+    // If we updated or created an entry, reload from API to get fresh data
+    // Otherwise, use the cached data we already have
+    const entries = isNewHighscore
+      ? await loadLeaderboard()
+      : currentLeaderboard || allEntries.map(apiToLocal);
+
+    return { entries, isNewHighscore, previousHighscore, scoreTooLow };
   } catch (error) {
     console.error('Failed to add/update score:', error);
-    return { entries: [], isNewHighscore: false };
+    return {
+      entries: [],
+      isNewHighscore: false,
+      previousHighscore: null,
+      scoreTooLow: false,
+    };
   }
 };
