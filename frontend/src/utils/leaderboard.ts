@@ -3,13 +3,14 @@ import { leaderboardApi, type LeaderboardApiEntry } from './api';
 
 // Convert API response to frontend format
 const apiToLocal = (apiEntry: LeaderboardApiEntry): LeaderboardEntry => ({
-  name: apiEntry.userName,
+  userName: apiEntry.userName,
   score: apiEntry.score,
   difficulty: apiEntry.difficulty as Difficulty,
-  won: false, // Backend doesn't store won status yet
-  timestamp: apiEntry.createdAt
-    ? new Date(apiEntry.createdAt).getTime()
-    : Date.now(),
+  timestamp: apiEntry.updatedAt
+    ? new Date(apiEntry.updatedAt).getTime()
+    : apiEntry.createdAt
+      ? new Date(apiEntry.createdAt).getTime()
+      : Date.now(),
   id: apiEntry.id,
 });
 
@@ -52,7 +53,7 @@ export const addOrUpdateScore = async (
     const allEntries = currentLeaderboard
       ? currentLeaderboard.map((entry) => ({
           id: entry.id,
-          userName: entry.name,
+          userName: entry.userName,
           score: entry.score,
           difficulty: entry.difficulty,
           createdAt: new Date(entry.timestamp).toISOString(),

@@ -29,14 +29,15 @@ export default function Leaderboard({
   // Find current player's entry and rank
   const playerEntry = currentPlayerName
     ? sortedEntries.find(
-        (entry) => entry.name.toLowerCase() === currentPlayerName.toLowerCase(),
+        (entry) =>
+          entry.userName.toLowerCase() === currentPlayerName.toLowerCase(),
       )
     : null;
 
   const playerRank = playerEntry
     ? sortedEntries.findIndex(
         (entry) =>
-          entry.name.toLowerCase() === currentPlayerName?.toLowerCase(),
+          entry.userName.toLowerCase() === currentPlayerName?.toLowerCase(),
       ) + 1
     : null;
 
@@ -82,11 +83,12 @@ export default function Leaderboard({
             {displayEntries.map((entry, index) => {
               const isCurrentPlayer =
                 currentPlayerName &&
-                entry.name.toLowerCase() === currentPlayerName.toLowerCase();
+                entry.userName.toLowerCase() ===
+                  currentPlayerName.toLowerCase();
               const actualRank = index < 5 ? index + 1 : playerRank;
 
               return (
-                <div key={`${entry.name}-${entry.timestamp}`}>
+                <div key={`${entry.userName}-${entry.timestamp}`}>
                   <div
                     className="grid gap-2 rounded py-1 hover:bg-gray-50 dark:hover:bg-gray-800"
                     style={{ gridTemplateColumns: '2rem 1fr 3rem 3rem' }}
@@ -101,15 +103,10 @@ export default function Leaderboard({
                       {index < 3 ? MEDALS[index] : actualRank}
                     </div>
                     <div className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                      {entry.name}
+                      {entry.userName}
                       {isCurrentPlayer && (
                         <span className="ml-1 text-xs text-blue-600 dark:text-blue-400">
                           (You)
-                        </span>
-                      )}
-                      {entry.won && (
-                        <span className="ml-1 text-xs text-emerald-500">
-                          👑
                         </span>
                       )}
                     </div>
