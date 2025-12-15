@@ -1,5 +1,7 @@
 FROM eclipse-temurin:21-jre
 
+LABEL service="myapp"
+
 WORKDIR /app
 
 COPY app.jar app.jar

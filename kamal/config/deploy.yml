@@ -1,0 +1,71 @@
+# yaml-language-server: $schema=https://json.schemastore.org/yamllint.json
+# Name der Applikation
+# WARNING: muss gleich sein zum Label "service" des zu deployende Dockerfile
+#          siehe: `../../app/Dockerfile`
+service: myapp
+
+# Name vom Container-Image
+image: ghcr.io/bbzbl-it-joku/module324
+
+registry:
+  server: ghcr.io
+  username: jokudev
+
+  # Always use an access token rather than real password when possible.
+  password: <%= ENV.fetch('GHCR_TOKEN') %>
+
+# Auf diesen Server deployen
+# INFO: Wir verwenden die öffentliche IP der AWS-VM via CI-Pipeline
+servers:
+  web:
+    hosts:
+      - <%= ENV.fetch('KAMAL_SERVER_IP') %>
+
+ssh:
+  user: ubuntu
+  # keys_only: true
+  # keys: ["../local/ssh/id_rsa.pem"]
+
+proxy:
+  app_port: 8080
+  healthcheck:
+    path: /api/health
+    interval: 2
+    timeout: 2
+# Seten von Environment-Variablen auf der VM
+# env:
+#   secret:
+#     - MYSQL_USER
+#     - MYSQL_PASSWORD
+#     - MYSQL_DATABASE
+
+# Use accessory services (secrets come from .env).
+# INFO: Konfiguriert MYSQL auf der VM.
+#       Es müssen alle Environment-Variablen als GitHub Environment-Variablen gesetzt sein.
+# accessories:
+#   mysql:
+#     image: mysql:8.0
+#     host: <%= ENV.fetch('KAMAL_SERVER_IP') %>
+#     port: 3306
+#     env:
+#       clear:
+#         MYSQL_ROOT_HOST: "%"
+#       secret:
+#         - MYSQL_ROOT_PASSWORD
+#         - MYSQL_USER
+#         - MYSQL_PASSWORD
+#         - MYSQL_DATABASE
+#     directories:
+#       - data:/var/lib/mysql
+
+builder:
+  arch: amd64
+# INFO: Nicht verwendet im Modul, wir builden direkt in der Github Action
+# Configure builder setup.
+#   context: ../app
+#   dockerfile: ../app/Dockerfile
+#   args:
+#     RUBY_VERSION: 3.4.2
+#   secrets:
+#     - GITHUB_TOKEN
+# remote: ssh://app@192.168.0.1
