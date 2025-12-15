@@ -27,9 +27,9 @@ jobs:
     secrets: inherit
 
   # prep for later
-  #deploy_application:
-  #  name: Deploy Application Pipeline
-  #  needs: [deploy_artifacts]
-  #  uses: ./.github/workflows/deploy-application.yml
-  #  if: startsWith(github.ref, 'refs/tags/')
-  #  secrets: inherit
+  deploy_application:
+    name: Deploy Application Pipeline
+    needs: [deploy_artifacts]
+    uses: ./.github/workflows/deploy-application.yml
+    if: startsWith(github.ref, 'refs/tags/')
+    secrets: inherit

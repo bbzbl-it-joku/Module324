@@ -1,0 +1,70 @@
+name: Deploy to AWS
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  DOCKER_IMAGE_NAME: bbzbl-it-joku/module324
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: aws
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: "./.github/shared/aws-credentials-to-env"
+        with:
+          aws-credentials: ${{ secrets.AWS_CREDENTIALS }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.aws-access-key-id }}
+          aws-secret-access-key: ${{ env.aws-secret-access-key }}
+          aws-session-token: ${{ env.aws-session-token }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+
+      - name: Get Server Ip
+        id: get-server-ip
+        working-directory: terraform
+        shell: bash
+        run: |
+          echo "SERVER_IP=$(sh scripts/get_public_ip.sh ubuntu2404)" >> $GITHUB_ENV
+
+      - name: Set up Ruby for Kamal
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_GEMFILE: ./kamal/Gemfile
+        with:
+          ruby-version: 3.4.2
+          bundler-cache: true
+
+      # Entspricht `docker login``
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Deployed das erstellte Image nach AWS
+      - name: Kamal deploy image
+        working-directory: kamal
+        env:
+          KAMAL_SERVER_IP: ${{ env.SERVER_IP }}
+          KAMAL_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          KAMAL_REGISTRY_PASSWORD: ${{ steps.login-ecr.outputs[format('docker_password_{0}_dkr_ecr_us_east_1_amazonaws_com', secrets.AWS_ACCOUNT_ID)] }}
+          VERSION: ${{ github.ref_type == 'tag' && github.ref_name || 'dev-snapshot' }}
+        run: |
+          bundle exec kamal deploy --skip-push --version=$VERSION
+          echo "Visit me on [http://$KAMAL_SERVER_IP](http://$KAMAL_SERVER_IP) 🚀" >> $GITHUB_STEP_SUMMARY
