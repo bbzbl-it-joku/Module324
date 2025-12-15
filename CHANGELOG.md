@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/bbzbl-it-joku/Module324/compare/v1.2.0...v1.3.0) (2025-12-15)
+
+
+### Features
+
+* **kamal:** Create AWS Deployment Pipeline ([2fa6a8f](https://github.com/bbzbl-it-joku/Module324/commit/2fa6a8fa4a3f61cee14f0d7ed1b9c8a9a83d0e73))
+* **kamal:** Implement Kamal Deployment ([aea0d1b](https://github.com/bbzbl-it-joku/Module324/commit/aea0d1b34f2154e3f7ee5d66eecbcf6edcfc8eab))
+
+
+### Bug Fixes
+
+* **kamal:** Add missing ENV Secret ([1eda20e](https://github.com/bbzbl-it-joku/Module324/commit/1eda20e2d92e867d5d7a343ff741f0200f7c60d8))
+
 ## [1.2.0](https://github.com/bbzbl-it-joku/Module324/compare/v1.1.0...v1.2.0) (2025-12-08)
 
 
