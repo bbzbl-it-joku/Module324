@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/bbzbl-it-joku/Module324/compare/v1.3.1...v1.3.2) (2025-12-15)
+
+
+### Bug Fixes
+
+* **frontend:** Remove hardcoded API base URL ([2e29174](https://github.com/bbzbl-it-joku/Module324/commit/2e29174b3fda811e6e7186c6412fff6dad073a4a))
+
 ## [1.3.1](https://github.com/bbzbl-it-joku/Module324/compare/v1.3.0...v1.3.1) (2025-12-15)
 
 
