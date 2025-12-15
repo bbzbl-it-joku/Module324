@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/bbzbl-it-joku/Module324/compare/v1.3.0...v1.3.1) (2025-12-15)
+
+
+### Bug Fixes
+
+* **ci:** Fix artifact download causing failing image ([9f2274d](https://github.com/bbzbl-it-joku/Module324/commit/9f2274de3b88b6e7a7593f65f15b54a865aea425))
+
 ## [1.3.0](https://github.com/bbzbl-it-joku/Module324/compare/v1.2.0...v1.3.0) (2025-12-15)
 
 
