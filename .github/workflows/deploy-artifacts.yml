@@ -78,7 +78,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: combined-jar
-          path: ./app.jar
+          path: ./combined-jar
+
+      - name: Move JAR
+        run: mv ./combined-jar/app.jar ./app.jar
 
       - name: Determine version
         id: version
