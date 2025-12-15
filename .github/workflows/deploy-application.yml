@@ -61,6 +61,7 @@ jobs:
       - name: Kamal deploy image
         working-directory: kamal
         env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
           KAMAL_SERVER_IP: ${{ env.SERVER_IP }}
           KAMAL_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           KAMAL_REGISTRY_PASSWORD: ${{ steps.login-ecr.outputs[format('docker_password_{0}_dkr_ecr_us_east_1_amazonaws_com', secrets.AWS_ACCOUNT_ID)] }}
