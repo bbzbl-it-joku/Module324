@@ -23,9 +23,7 @@ describe('leaderboardApi', () => {
 
       const result = await leaderboardApi.getAll();
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:8080/api/leaderboard',
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith('/api/leaderboard');
       expect(result).toEqual(mockData);
     });
 
@@ -54,7 +52,7 @@ describe('leaderboardApi', () => {
       const result = await leaderboardApi.getTop10('hard');
 
       expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:8080/api/leaderboard/top10/hard',
+        '/api/leaderboard/top10/hard',
       );
       expect(result).toEqual(mockData);
     });
@@ -86,9 +84,7 @@ describe('leaderboardApi', () => {
 
       const result = await leaderboardApi.getById(1);
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:8080/api/leaderboard/1',
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith('/api/leaderboard/1');
       expect(result).toEqual(mockData);
     });
 
@@ -115,16 +111,13 @@ describe('leaderboardApi', () => {
 
       const result = await leaderboardApi.create(newEntry);
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:8080/api/leaderboard',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newEntry),
+      expect(globalThis.fetch).toHaveBeenCalledWith('/api/leaderboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify(newEntry),
+      });
       expect(result).toEqual(mockResponse);
     });
 
@@ -157,16 +150,13 @@ describe('leaderboardApi', () => {
 
       const result = await leaderboardApi.update(1, updateData);
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:8080/api/leaderboard/1',
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updateData),
+      expect(globalThis.fetch).toHaveBeenCalledWith('/api/leaderboard/1', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify(updateData),
+      });
       expect(result).toEqual(mockResponse);
     });
 
@@ -195,12 +185,9 @@ describe('leaderboardApi', () => {
 
       await leaderboardApi.delete(1);
 
-      expect(globalThis.fetch).toHaveBeenCalledWith(
-        'http://localhost:8080/api/leaderboard/1',
-        {
-          method: 'DELETE',
-        },
-      );
+      expect(globalThis.fetch).toHaveBeenCalledWith('/api/leaderboard/1', {
+        method: 'DELETE',
+      });
     });
 
     it('should throw error when deletion fails', async () => {
