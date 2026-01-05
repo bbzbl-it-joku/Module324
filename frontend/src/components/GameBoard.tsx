@@ -32,7 +32,7 @@ export default function GameBoard({
         {/* Score Display */}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Snake Game
+            Online Snake Game
           </h2>
           <p
             className={`text-3xl font-bold transition-all duration-500 ${
