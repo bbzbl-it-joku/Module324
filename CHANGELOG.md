@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/bbzbl-it-joku/Module324/compare/v1.3.2...v1.4.0) (2026-01-05)
+
+
+### Features
+
+* **frontend:** Update title to 'Online Snake Game' ([064f3f9](https://github.com/bbzbl-it-joku/Module324/commit/064f3f98520951ab36d667a49ed4561110e92557))
+
 ## [1.3.2](https://github.com/bbzbl-it-joku/Module324/compare/v1.3.1...v1.3.2) (2025-12-15)
 
 
